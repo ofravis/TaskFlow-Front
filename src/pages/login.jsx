@@ -1,3 +1,4 @@
+import api from ".../api";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
@@ -10,20 +11,26 @@ function Login() {
   const [erro, setErro] = useState("");
   const [shake, setShake] = useState(false);
   const { login } = useAuth();
-
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   async function handleLogin() {
-    if (usuario === "admin" && senha === "1234") {
-      await login();
-      navigate("/");
-      return;
+    setErro("");
+    try {
+      const resposta = await api.post("/auth/login", {
+        usuario,
+        senha,
+      });
+      const { token, usuario } = resposta.data;
+      login(usuario, token); // guarda no AuthContext e localStorage
+      navigate("/"); // redireciona para o kanban
+    } catch (err) {
+      setErro(err.response?.data?.erro || "Erro ao fazer login");
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
     }
-    setErro("Usuário ou senha incorretos");
-    setShake(true);
-    setTimeout(() => setErro(""), 3000);
-    setTimeout(() => setShake(false), 800); // Remove a classe após a animação
   }
+
   return (
     <div className="login-container">
       <div className="login-sidebar">

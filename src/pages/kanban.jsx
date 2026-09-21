@@ -2,31 +2,28 @@ import Header from "../componentes/header";
 import ListaTarefas from "../componentes/listatarefas";
 import ModalTarefa from "../componentes/modaltarefa";
 import { useState, useEffect } from "react";
-import axios from "axios"; // 1. IMPORT DO AXIOS ADICIONADO
+import axios from "axios";
 
 function Kanban() {
   const [tarefas, setTarefas] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
 
-  // Altere para "http://localhost:3000/tarefas" se for usar o seu backend Express local
   const URL_API = "https://6a85afa89c451dc67a63f802.mockapi.io/api/v1/tarefas";
 
-  // ── Modal: controla criação e edição de tarefas ─────────────────────────
   const [modalAberto, setModalAberto] = useState(false);
   const [tarefaEditando, setTarefaEditando] = useState(null);
   const [colunaAtiva, setColunaAtiva] = useState("afazer");
 
-  // ── Filtro por prioridade ─────────────────────────
   const [filtroPrioridade, setFiltroPrioridade] = useState("todas");
 
-  // CARREGAR TAREFAS (GET)
   useEffect(() => {
     async function carregarTarefas() {
       try {
         setCarregando(true);
         setErro("");
-        const resposta = await axios.get(URL_API);
+
+        const resposta = await api.get("/tarefas");
         setTarefas(resposta.data);
       } catch (e) {
         setErro("Erro ao carregar tarefas. Verifique a conexão.");
@@ -35,11 +32,9 @@ function Kanban() {
         setCarregando(false);
       }
     }
-
     carregarTarefas();
   }, []);
 
-  // Controladores do Modal
   function abrirModalCriar(coluna) {
     setTarefaEditando(null);
     setColunaAtiva(coluna);
@@ -56,7 +51,6 @@ function Kanban() {
     setTarefaEditando(null);
   }
 
-  // SALVAR TAREFA (POST / PUT) - Função Única e Unificada
   async function salvarTarefa(dados) {
     try {
       setErro("");
@@ -76,18 +70,17 @@ function Kanban() {
           prev.map((t) => (t.id === dados.id ? tarefaEditada : t)),
         );
       } else {
-        // Se NÃO possui ID, é CRIAR (POST)
         const { data: novaTarefa } = await axios.post(URL_API, {
           texto: dados.texto,
           prioridade: dados.prioridade || "media",
           cidade: dados.cidade || "",
-          coluna: dados.coluna || colunaAtiva, // Usa coluna passada ou a coluna onde clicou no +
+          coluna: dados.coluna || colunaAtiva,
         });
 
         setTarefas((prev) => [...prev, novaTarefa]);
       }
 
-      fecharModal(); // Fecha o modal após o sucesso
+      fecharModal();
     } catch (e) {
       setErro(
         "Erro ao salvar tarefa. Verifique se os campos obrigatórios estão preenchidos.",
@@ -140,7 +133,6 @@ function Kanban() {
     }
   }
 
-  // Aplicar filtro de prioridade
   const tarefasFiltradas =
     filtroPrioridade === "todas"
       ? tarefas
