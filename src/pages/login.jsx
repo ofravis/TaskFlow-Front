@@ -1,4 +1,3 @@
-import api from ".../api";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
@@ -11,26 +10,53 @@ function Login() {
   const [erro, setErro] = useState("");
   const [shake, setShake] = useState(false);
   const { login } = useAuth();
-  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
-  async function handleLogin() {
+  const handleLogin = async () => {
     setErro("");
+
+    if (!usuario.trim() || !senha.trim()) {
+      setErro("Informe usuário e senha para continuar.");
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      return;
+    }
+
     try {
-      const resposta = await api.post("/auth/login", {
-        usuario,
-        senha,
-      });
-      const { token, usuario } = resposta.data;
-      login(usuario, token); // guarda no AuthContext e localStorage
-      navigate("/"); // redireciona para o kanban
+      const response = await fetch(
+        "https://taskflow-back-seven.vercel.app/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: usuario,
+            senha: senha,
+          }),
+        },
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        // 3. Guardar o token no localStorage
+        localStorage.setItem("token", data.token);
+
+        if (typeof login === "function") {
+          await login(data);
+        }
+        navigate("/");
+      } else {
+        setErro(data.mensagem || "E-mail ou senha incorretos.");
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
+      }
     } catch (err) {
-      setErro(err.response?.data?.erro || "Erro ao fazer login");
+      setErro("Erro de conexão com o servidor. Tente novamente.");
       setShake(true);
       setTimeout(() => setShake(false), 500);
     }
-  }
-
+  };
   return (
     <div className="login-container">
       <div className="login-sidebar">
@@ -78,7 +104,6 @@ function Login() {
         </div>
       </div>
 
-      {/* Conteúdo direito — vazio ou decorativo */}
       <div className="login-content"></div>
     </div>
   );

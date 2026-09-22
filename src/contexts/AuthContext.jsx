@@ -1,52 +1,48 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext(null);
-
-function getAuthData() {
-  async function getUser() {
-    const response = await fetch("https://randomuser.me/api/");
-    const data = await response.json();
-    return data.results[0];
-  }
-
-  return { getUser };
-}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [logado, setLogado] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const login = async () => {
-    try {
-      setLoading(true);
-      const userData = await Promise.race([
-        getAuthData().getUser(),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error("Timeout")), 5000),
-        ),
-      ]);
-      setUser(userData);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const usuarioSalvo = localStorage.getItem("usuario");
+
+    if (token) {
       setLogado(true);
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
+      if (usuarioSalvo) {
+        try {
+          setUser(JSON.parse(usuarioSalvo));
+        } catch (e) {
+          console.error("Erro ao ler dados do utilizador:", e);
+        }
+      }
+    }
+
+    setLoading(false);
+  }, []);
+
+  const login = (data) => {
+    if (data?.token) {
+      localStorage.setItem("token", data.token);
+
+      const dadosUtilizador = data.usuario ||
+        data.user || { email: data.email };
+      localStorage.setItem("usuario", JSON.stringify(dadosUtilizador));
+
+      setUser(dadosUtilizador);
       setLogado(true);
-      setUser({ name: { first: "Usuário", last: "Local" } });
-    } finally {
-      setLoading(false);
     }
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
     setUser(null);
     setLogado(false);
-  };
-
-  const value = {
-    user,
-    logado,
-    login,
-    logout,
   };
 
   return (
