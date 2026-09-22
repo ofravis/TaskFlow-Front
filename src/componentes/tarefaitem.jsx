@@ -63,6 +63,16 @@ function TarefaItem({
           </button>
         )}
 
+        {onEditar && (
+          <button
+            className={styles.btnEditar}
+            onClick={onEditar}
+            title="Editar tarefa"
+          >
+            ✎
+          </button>
+        )}
+
         <button className={styles.btnDeletar} onClick={onDeletar}>
           X
         </button>
