@@ -2,14 +2,32 @@ import Header from "../componentes/header";
 import ListaTarefas from "../componentes/listatarefas";
 import ModalTarefa from "../componentes/modaltarefa";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import axios from "axios";
+
+// URL base da API (mesma usada no login), configurável via VITE_API_URL
+const BASE_URL =
+  import.meta.env.VITE_API_URL || "https://taskflow-back-seven.vercel.app";
+
+// Instância própria: injeta o token JWT salvo no login em toda requisição
+// e redireciona para /login automaticamente se o token expirar/for inválido
+const api = axios.create({ baseURL: BASE_URL });
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 function Kanban() {
   const [tarefas, setTarefas] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
+  const navigate = useNavigate();
 
-  const URL_API = "https://6a85afa89c451dc67a63f802.mockapi.io/api/v1/tarefas";
+  const URL_API = "/tarefas";
 
   const [modalAberto, setModalAberto] = useState(false);
   const [tarefaEditando, setTarefaEditando] = useState(null);
@@ -23,9 +41,13 @@ function Kanban() {
         setCarregando(true);
         setErro("");
 
-        const resposta = await axios.get(URL_API);
+        const resposta = await api.get(URL_API);
         setTarefas(resposta.data);
       } catch (e) {
+        if (e.response?.status === 401) {
+          navigate("/login");
+          return;
+        }
         setErro("Erro ao carregar tarefas. Verifique a conexão.");
         console.error(e);
       } finally {
@@ -56,12 +78,11 @@ function Kanban() {
       setErro("");
 
       if (dados.id) {
-        const { data: tarefaEditada } = await axios.put(
+        const { data: tarefaEditada } = await api.put(
           `${URL_API}/${dados.id}`,
           {
             texto: dados.texto,
             prioridade: dados.prioridade,
-            cidade: dados.cidade,
             coluna: dados.coluna || colunaAtiva,
           },
         );
@@ -70,10 +91,9 @@ function Kanban() {
           prev.map((t) => (t.id === dados.id ? tarefaEditada : t)),
         );
       } else {
-        const { data: novaTarefa } = await axios.post(URL_API, {
+        const { data: novaTarefa } = await api.post(URL_API, {
           texto: dados.texto,
           prioridade: dados.prioridade || "media",
-          cidade: dados.cidade || "",
           coluna: dados.coluna || colunaAtiva,
         });
 
@@ -82,9 +102,15 @@ function Kanban() {
 
       fecharModal();
     } catch (e) {
-      setErro(
-        "Erro ao salvar tarefa. Verifique se os campos obrigatórios estão preenchidos.",
-      );
+      if (e.response?.status === 401) {
+        navigate("/login");
+        return;
+      }
+      const mensagem =
+        e.response?.data?.erro ||
+        e.response?.data?.erros?.join(", ") ||
+        "Erro ao salvar tarefa. Verifique se os campos obrigatórios estão preenchidos.";
+      setErro(mensagem);
       console.error(e);
     }
   }
@@ -105,13 +131,18 @@ function Kanban() {
       if (!tarefaAtual) return;
 
       // Utiliza PUT em vez de PATCH
-      const { data: tarefaMovida } = await axios.put(`${URL_API}/${id}`, {
-        ...tarefaAtual,
+      const { data: tarefaMovida } = await api.put(`${URL_API}/${id}`, {
+        texto: tarefaAtual.texto,
+        prioridade: tarefaAtual.prioridade,
         coluna: novaColuna,
       });
 
       setTarefas((prev) => prev.map((t) => (t.id === id ? tarefaMovida : t)));
     } catch (e) {
+      if (e.response?.status === 401) {
+        navigate("/login");
+        return;
+      }
       setErro("Erro ao mover tarefa. Verifique se o servidor está rodando.");
       console.error(e);
     }
@@ -125,9 +156,13 @@ function Kanban() {
     if (!confirmado) return;
 
     try {
-      await axios.delete(`${URL_API}/${id}`);
+      await api.delete(`${URL_API}/${id}`);
       setTarefas((prev) => prev.filter((t) => t.id !== id));
     } catch (e) {
+      if (e.response?.status === 401) {
+        navigate("/login");
+        return;
+      }
       setErro("Erro ao deletar tarefa.");
       console.error(e);
     }
