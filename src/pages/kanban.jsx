@@ -182,8 +182,8 @@ function Kanban() {
   return (
     <>
       <Header
-        titulo="TaskFlow Blud.. 🥀 "
-        subtitulo="Seu Gerenciador de Tarefas 🫵"
+        titulo="TaskFlow Hub"
+        subtitulo="O Seu Gerenciador de Tarefas 🫵"
         tarefas={tarefas}
       />
 
