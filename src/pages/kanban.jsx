@@ -80,8 +80,10 @@ function Kanban() {
           {
             texto: dados.texto,
             prioridade: dados.prioridade,
-            cidade: dados.cidade || "",
-            cep: dados.cep || "",
+            cidade: dados.cidade || dados.localidade || "",
+            localidade: dados.cidade || dados.localidade || "",
+            cep: dados.cep || dados.CEP || "",
+            CEP: dados.cep || dados.CEP || "",
             coluna: dados.coluna || colunaAtiva,
           },
         );
@@ -93,8 +95,10 @@ function Kanban() {
         const { data: novaTarefa } = await api.post(URL_API, {
           texto: dados.texto,
           prioridade: dados.prioridade || "media",
-          cidade: dados.cidade || "",
-          cep: dados.cep || "",
+          cidade: dados.cidade || dados.localidade || "",
+          localidade: dados.cidade || dados.localidade || "",
+          cep: dados.cep || dados.CEP || "",
+          CEP: dados.cep || dados.CEP || "",
           coluna: dados.coluna || colunaAtiva,
         });
 
@@ -133,8 +137,10 @@ function Kanban() {
       const { data: tarefaMovida } = await api.put(`${URL_API}/${id}`, {
         texto: tarefaAtual.texto,
         prioridade: tarefaAtual.prioridade,
-        cidade: tarefaAtual.cidade || "",
-        cep: tarefaAtual.cep || "",
+        cidade: tarefaAtual.cidade || tarefaAtual.localidade || "",
+        localidade: tarefaAtual.cidade || tarefaAtual.localidade || "",
+        cep: tarefaAtual.cep || tarefaAtual.CEP || "",
+        CEP: tarefaAtual.cep || tarefaAtual.CEP || "",
         coluna: novaColuna,
       });
 

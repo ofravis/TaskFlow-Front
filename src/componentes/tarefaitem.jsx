@@ -26,6 +26,7 @@ function TarefaItem({
   const classePrioridade =
     styles["badge-prioridade"] + " " + styles["badge-" + prioridade];
 
+  const localizacaoExibida = cidade || cep || "";
   const modoKanban = onMover !== null;
 
   return (
@@ -38,8 +39,8 @@ function TarefaItem({
         >
           {texto}
         </span>
-        {(cidade || cep) && (
-          <span className={styles.cidade}>{cidade || cep}</span>
+        {localizacaoExibida && (
+          <span className={styles.cidade}>{localizacaoExibida}</span>
         )}
       </div>
 

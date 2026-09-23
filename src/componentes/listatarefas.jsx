@@ -21,8 +21,10 @@ function ListaTarefas({
             <TarefaItem
               key={tarefa.id}
               texto={tarefa.texto}
-              cidade={tarefa.cidade}
-              cep={tarefa.cep}
+              cidade={
+                tarefa.cidade || tarefa.localidade || tarefa.endereco || ""
+              }
+              cep={tarefa.cep || tarefa.CEP || tarefa.codigoPostal || ""}
               concluida={tarefa.concluida}
               prioridade={tarefa.prioridade}
               onDeletar={() => onDeletar(tarefa.id)}

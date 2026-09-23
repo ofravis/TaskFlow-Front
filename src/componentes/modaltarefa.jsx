@@ -15,10 +15,13 @@ function ModalTarefa({
   const [prioridade, setPrioridade] = useState("media");
 
   useEffect(() => {
-    setCep(tarefa?.cep || "");
+    const cidadeInicial = tarefa?.cidade || tarefa?.localidade || "";
+    const cepInicial = tarefa?.cep || tarefa?.CEP || "";
+
+    setCep(cepInicial);
     if (tarefa) {
       setTexto(tarefa.texto);
-      setCidade(tarefa.cidade || "");
+      setCidade(cidadeInicial);
       setPrioridade(tarefa.prioridade);
     } else {
       setTexto("");
@@ -56,7 +59,9 @@ function ModalTarefa({
       id: tarefa?.id,
       texto,
       cidade,
+      localidade: cidade,
       cep,
+      CEP: cep,
       prioridade,
       coluna: tarefa?.coluna || coluna,
     });

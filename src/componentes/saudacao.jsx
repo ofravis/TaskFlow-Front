@@ -4,8 +4,8 @@ function Saudacao() {
   return (
     <div>
       <h1>Olá, {nome}!</h1>
-      <h4>Ok!!!</h4>
-      <p>Curso Programador Full Stack {ano}</p>
+      <h4>Okay</h4>
+      <p>Curso Programação FullStack {ano}</p>
     </div>
   );
 }
