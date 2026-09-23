@@ -39,7 +39,6 @@ function Login() {
 
       const data = await response.json();
       if (response.ok) {
-        // 3. Guardar o token no localStorage
         localStorage.setItem("token", data.token);
 
         if (typeof login === "function") {

@@ -5,6 +5,7 @@ function TarefaItem({
   concluida = false,
   prioridade = "media",
   cidade = "",
+  cep = "",
   onDeletar,
   onConcluir,
 
@@ -37,7 +38,9 @@ function TarefaItem({
         >
           {texto}
         </span>
-        {cidade && <span className={styles.cidade}>{cidade}</span>}
+        {(cidade || cep) && (
+          <span className={styles.cidade}>{cidade || cep}</span>
+        )}
       </div>
 
       <span className={classePrioridade}>{prioridade}</span>

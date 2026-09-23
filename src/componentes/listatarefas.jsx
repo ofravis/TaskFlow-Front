@@ -22,6 +22,7 @@ function ListaTarefas({
               key={tarefa.id}
               texto={tarefa.texto}
               cidade={tarefa.cidade}
+              cep={tarefa.cep}
               concluida={tarefa.concluida}
               prioridade={tarefa.prioridade}
               onDeletar={() => onDeletar(tarefa.id)}

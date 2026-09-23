@@ -4,33 +4,23 @@ const [modalAberto, setModalAberto] = useState(false);
 const [tarefaEditando, setTarefaEditando] = useState(null);
 const [colunaAtiva, setColunaAtiva] = useState("afazer");
 
-// Abre modal para CRIAR — botão + na coluna
-
 function abrirModalCriar(coluna) {
-  setTarefaEditando(null); // null = modo criação
+  setTarefaEditando(null);
   setColunaAtiva(coluna);
   setModalAberto(true);
 }
 
-// Abre modal para EDITAR — duplo clique no card
-
 function abrirModalEditar(tarefa) {
-  setTarefaEditando(tarefa); // objeto = modo edição
+  setTarefaEditando(tarefa);
   setModalAberto(true);
 }
 
-// Uma função para criar E editar
-
 function salvarTarefa(dados) {
   if (dados.id) {
-    // EDITAR: atualiza a tarefa com o id correspondente
-
     setTarefas(
       tarefas.map((t) => (t.id === dados.id ? { ...t, ...dados } : t)),
     );
   } else {
-    // CRIAR: adiciona nova tarefa com id gerado
-
     setTarefas([...tarefas, { ...dados, id: Date.now() }]);
   }
 }
@@ -51,10 +41,6 @@ function salvarTarefa(dados) {
   </div>
 </div>;
 
-{
-  /* ListaTarefas passa onEditar para o TarefaItem */
-}
-
 <ListaTarefas
   tarefas={tarefas.filter((t) => t.coluna === "afazer")}
   onDeletar={deletarTarefa}
@@ -63,9 +49,6 @@ function salvarTarefa(dados) {
   colunaAnterior={null}
   colunaProxima="andamento"
 />;
-
-{
-}
 
 <ModalTarefa
   aberto={modalAberto}

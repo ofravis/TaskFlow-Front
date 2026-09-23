@@ -181,7 +181,6 @@ main {
   outline-offset: 2px;
 }
 
-/* ── 8. CONTROLES (FILTROS) ───────────────────────────────── */
 #controles {
   margin-bottom: 20px;
 }
@@ -219,7 +218,6 @@ main {
   font-weight: 700;
 }
 
-/* ── 9. LISTA DE TAREFAS ──────────────────────────────────── */
 #lista-tarefas {
   list-style: none;
   display: flex;
@@ -227,7 +225,6 @@ main {
   gap: 8px;
 }
 
-/* ── 10. TAREFA ───────────────────────────────────────────── */
 .tarefa {
   display: flex;
   justify-content: space-between;
@@ -248,7 +245,6 @@ main {
   background-color: #1e3a5f;
 }
 
-/* Prioridades — cor da borda esquerda */
 .tarefa.alta {
   border-left-color: #ef4444;
 }
@@ -259,7 +255,6 @@ main {
   border-left-color: #71e255;
 }
 
-/* Estado concluída */
 .tarefa.concluida {
   opacity: 0.5;
   border-style: dashed;
@@ -422,22 +417,20 @@ footer {
   transform: scale(0.92);
 }
 
-/* ── LISTA DE TAREFAS DENTRO DA COLUNA ──────────────────── */
 .kanban-lista {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-height: 60px; /* altura mínima mesmo quando a coluna está vazia */
+  min-height: 60px;
 }
 
 .kanban-lista .tarefa {
-  flex-direction: column; /* empilha texto + ações verticalmente */
+  flex-direction: column;
   align-items: flex-start;
   gap: 8px;
 }
 
-/* O texto ocupa toda a largura disponível */
 .kanban-lista .tarefa span:first-child {
   width: 100%;
 }

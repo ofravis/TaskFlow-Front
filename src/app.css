@@ -183,16 +183,13 @@
   }
 }
 
-/* ── LAYOUT COM SIDEBAR — Semana 6, Dia 1 ─────────────────────────────────
-   .app-layout: coloca Sidebar e conteúdo principal lado a lado
-   .app-conteudo: empurra o conteúdo para a direita da sidebar fixa       */
 .app-layout {
   display: flex;
   min-height: 100vh;
 }
 
 .app-conteudo {
-  margin-left: 220px; /* igual à largura da sidebar */
+  margin-left: 220px;
   flex: 1;
-  min-width: 0; /* evita overflow em telas pequenas */
+  min-width: 0;
 }

@@ -5,12 +5,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
-// URL base da API (mesma usada no login), configurável via VITE_API_URL
 const BASE_URL =
   import.meta.env.VITE_API_URL || "https://taskflow-back-seven.vercel.app";
 
-// Instância própria: injeta o token JWT salvo no login em toda requisição
-// e redireciona para /login automaticamente se o token expirar/for inválido
 const api = axios.create({ baseURL: BASE_URL });
 
 api.interceptors.request.use((config) => {
@@ -83,6 +80,8 @@ function Kanban() {
           {
             texto: dados.texto,
             prioridade: dados.prioridade,
+            cidade: dados.cidade || "",
+            cep: dados.cep || "",
             coluna: dados.coluna || colunaAtiva,
           },
         );
@@ -94,6 +93,8 @@ function Kanban() {
         const { data: novaTarefa } = await api.post(URL_API, {
           texto: dados.texto,
           prioridade: dados.prioridade || "media",
+          cidade: dados.cidade || "",
+          cep: dados.cep || "",
           coluna: dados.coluna || colunaAtiva,
         });
 
@@ -126,14 +127,14 @@ function Kanban() {
   async function moverTarefa(id, novaColuna) {
     try {
       setErro("");
-      // Busca a tarefa atual no estado
       const tarefaAtual = tarefas.find((t) => t.id === id);
       if (!tarefaAtual) return;
 
-      // Utiliza PUT em vez de PATCH
       const { data: tarefaMovida } = await api.put(`${URL_API}/${id}`, {
         texto: tarefaAtual.texto,
         prioridade: tarefaAtual.prioridade,
+        cidade: tarefaAtual.cidade || "",
+        cep: tarefaAtual.cep || "",
         coluna: novaColuna,
       });
 
@@ -148,7 +149,6 @@ function Kanban() {
     }
   }
 
-  // DELETAR TAREFA (DELETE)
   async function deletarTarefa(id) {
     const confirmado = window.confirm(
       "Deletar esta tarefa? Esta ação não pode ser desfeita.",
@@ -215,9 +215,7 @@ function Kanban() {
           </div>
         </section>
 
-        {/* Quadro Kanban */}
         <div className="kanban-quadro">
-          {/* Coluna: A Fazer */}
           <div className="kanban-coluna">
             <div className="kanban-coluna-header">
               <h3>A Fazer</h3>
@@ -246,7 +244,6 @@ function Kanban() {
             />
           </div>
 
-          {/* Coluna: Em Andamento */}
           <div className="kanban-coluna">
             <div className="kanban-coluna-header">
               <h3>Em Andamento</h3>
@@ -278,7 +275,6 @@ function Kanban() {
             />
           </div>
 
-          {/* Coluna: Concluído */}
           <div className="kanban-coluna">
             <div className="kanban-coluna-header">
               <h3>Concluído</h3>

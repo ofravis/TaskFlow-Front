@@ -56,6 +56,7 @@ function ModalTarefa({
       id: tarefa?.id,
       texto,
       cidade,
+      cep,
       prioridade,
       coluna: tarefa?.coluna || coluna,
     });
