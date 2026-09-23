@@ -17,14 +17,15 @@ header .container {
 
 .logo h1 {
   color: #c026d3;
-  font-size: 1.6rem;
-  font-weight: 700;
+  font-size: 2.3rem;
+  font-weight: 720;
   line-height: 1.2;
-  font-family: 'Orbitron', monospace;
+  font-family: "Orbitron", monospace;
   letter-spacing: 0.05em;
+  padding: 10px 0;
 }
 
 .logo p {
-  color: #888;
-  font-size: 0.85rem;
+  color: #9bebff;
+  font-size: 0.9rem;
 }

@@ -182,8 +182,8 @@ function Kanban() {
   return (
     <>
       <Header
-        titulo="TaskFlow Hub"
-        subtitulo="Gerencie suas tarefas"
+        titulo="TaskFlow Blud.. 🥀 "
+        subtitulo="Seu Gerenciador de Tarefas 🫵"
         tarefas={tarefas}
       />
 
@@ -213,7 +213,7 @@ function Kanban() {
               value={filtroPrioridade}
               onChange={(e) => setFiltroPrioridade(e.target.value)}
             >
-              <option value="todas">Todas as prioridades</option>
+              <option value="todas"> — Todas as Prioridades — </option>
               <option value="alta">🔴 Alta</option>
               <option value="media">🟡 Média</option>
               <option value="baixa">🟢 Baixa</option>
@@ -232,7 +232,7 @@ function Kanban() {
                 <button
                   className="kanban-btn-add"
                   type="button"
-                  title="Nova tarefa em A Fazer"
+                  title="Nova tarefa A Fazer"
                   onClick={() => abrirModalCriar("afazer")}
                 >
                   +
@@ -263,7 +263,7 @@ function Kanban() {
                 <button
                   className="kanban-btn-add"
                   type="button"
-                  title="Nova tarefa em Em Andamento"
+                  title="Nova tarefa Em Andamento"
                   onClick={() => abrirModalCriar("andamento")}
                 >
                   +
@@ -294,7 +294,7 @@ function Kanban() {
                 <button
                   className="kanban-btn-add"
                   type="button"
-                  title="Nova tarefa em Concluído"
+                  title="Nova tarefa Concluído"
                   onClick={() => abrirModalCriar("concluido")}
                 >
                   +
