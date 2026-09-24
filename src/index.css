@@ -7,7 +7,7 @@
 body {
   background-color: #0d0d0d;
   color: white;
-  font-family: "Inter", Arial, sans-serif;
+  font-family: "Orbitron", "Segoe UI", sans-serif;
   font-size: 16px;
   line-height: 1.6;
   min-height: 100vh;
@@ -20,8 +20,22 @@ h2,
 h3,
 h4,
 h5,
+h6,
+p,
+span,
+button,
+select,
+input,
+a {
+  font-family: "Orbitron", "Segoe UI", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
 h6 {
-  font-family: "Orbitron", monospace;
   font-weight: 700;
   letter-spacing: 0.05em;
 }
