@@ -34,6 +34,7 @@
   color: #888;
   font-size: 0.9rem;
   text-align: center;
+  font-family: "Orbitron", monospace;
 }
 
 .login-input {
@@ -43,7 +44,7 @@
   border-radius: 6px;
   padding: 11px 14px;
   font-size: 1rem;
-  font-family: inherit;
+  font-family: "Arial", sans-serif;
   outline: none;
   transition: all 0.2s ease;
 }
