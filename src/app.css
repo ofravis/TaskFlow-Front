@@ -188,8 +188,16 @@
   min-height: 100vh;
 }
 
+.login-layout {
+  display: block;
+}
+
 .app-conteudo {
   margin-left: 220px;
   flex: 1;
   min-width: 0;
+}
+
+.login-conteudo {
+  margin-left: 0;
 }

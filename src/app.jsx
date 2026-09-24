@@ -12,9 +12,9 @@ export default function App() {
   const isLoginPage = location.pathname === "/login";
 
   return (
-    <div className="app-layout">
+    <div className={`app-layout ${isLoginPage ? "login-layout" : ""}`}>
       {!isLoginPage && <Sidebar />}
-      <main className="app-conteudo">
+      <main className={`app-conteudo ${isLoginPage ? "login-conteudo" : ""}`}>
         <Routes>
           <Route
             path="/"
