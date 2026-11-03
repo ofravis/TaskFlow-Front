@@ -12,54 +12,81 @@ function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    setErro("");
+  const shakeCard = () => {
+    setShake(false);
+    window.requestAnimationFrame(() => setShake(true));
+  };
 
+  const handleLogin = async () => {
     if (!usuario.trim() || !senha.trim()) {
       setErro("Informe usuário e senha para continuar.");
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
+      shakeCard();
       return;
     }
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL || "https://taskflow-back-seven.vercel.app"}/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: usuario,
-            senha: senha,
-          }),
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          email: usuario,
+          senha: senha,
+        }),
+      });
 
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem("token", data.token);
-
-        if (typeof login === "function") {
-          await login(data);
+      const responseBody = await response.text();
+      let data = null;
+      if (responseBody) {
+        try {
+          data = JSON.parse(responseBody);
+        } catch {
+          if (response.ok) {
+            throw new Error("O servidor retornou uma resposta inválida.");
+          }
         }
-        navigate("/");
-      } else {
-        setErro(data.mensagem || "E-mail ou senha incorretos.");
-        setShake(true);
-        setTimeout(() => setShake(false), 500);
       }
+
+      if (!response.ok) {
+        setErro(
+          data?.mensagem ||
+            data?.message ||
+            (response.status >= 500
+              ? `Erro no servidor da API (HTTP ${response.status}).`
+              : "E-mail ou senha incorretos."),
+        );
+        shakeCard();
+        return;
+      }
+
+      if (!data?.token) {
+        throw new Error(
+          "A resposta do servidor não contém um token de acesso.",
+        );
+      }
+
+      localStorage.setItem("token", data.token);
+      if (typeof login === "function") {
+        await login(data);
+      }
+      navigate("/");
     } catch (err) {
-      setErro("Erro de conexão com o servidor. Tente novamente.");
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
+      setErro(
+        err instanceof Error
+          ? err.message
+          : "Não foi possível conectar ao servidor. Tente novamente.",
+      );
+      shakeCard();
     }
   };
   return (
     <div className="login-container">
       <div className="login-sidebar">
-        <div className={`login-card ${shake ? "shake" : ""}`}>
+        <div
+          className={`login-card ${shake ? "shake" : ""}`}
+          onAnimationEnd={() => setShake(false)}
+        >
           <h1 className="login-logo">TaskFlow </h1>
           <p className="login-subtitulo">Faça login para continuar</p>
 

@@ -5,8 +5,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
-const BASE_URL =
-  import.meta.env.VITE_API_URL || "https://taskflow-back-seven.vercel.app";
+const BASE_URL = "/api";
 
 const api = axios.create({ baseURL: BASE_URL });
 
