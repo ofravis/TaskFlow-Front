@@ -96,8 +96,8 @@
   text-align: center;
 }
 
-.shake {
-  animation: shake 0.8s ease-in-out;
+.login-card.shake {
+  animation: login-shake 0.45s ease-in-out;
 }
 
 .login-btn {
@@ -132,23 +132,22 @@
   text-align: center;
 }
 
-@keyframes shake {
+@keyframes login-shake {
   0%,
   100% {
     transform: translateX(0);
   }
-  15%,
-  45%,
+  25%,
   75% {
     transform: translateX(-8px);
   }
-  30%,
-  60%,
-  90% {
+  50% {
     transform: translateX(8px);
   }
 }
 
-.shake {
-  animation: shake 0.8s ease-in-out;
+@media (prefers-reduced-motion: reduce) {
+  .login-card.shake {
+    animation: none;
+  }
 }
