@@ -22,12 +22,12 @@
 }
 
 .login-logo {
-  color: #c026d3;
-  font-size: 2rem;
+  color: #e71eee;
+  font-size: 3rem;
   text-align: center;
-  font-family: "Arial", monospace;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  font-family: "fantasy", monospace;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .login-subtitulo {
